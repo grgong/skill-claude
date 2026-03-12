@@ -9,7 +9,7 @@ This skill delegates prompts to **Claude Code CLI** (`claude -p`), running it as
 
 ## Running a Task
 1. Ask the user (via `AskUserQuestion`) which model to run (`opus` or `sonnet` — or full model IDs like `claude-opus-4-6`, `claude-sonnet-4-6`) AND which permission mode to use (`default`, `acceptEdits`, `plan`, or `bypassPermissions`) AND which effort level to use (`low`, `medium`, `high`, or `max`) in a **single prompt with three questions**.
-2. Select the permission mode required for the task; default to `--permission-mode plan` for read-only analysis, `--permission-mode acceptEdits` for edit tasks.
+2. Use the user's choices. If the user does not specify a permission mode, default to `--permission-mode plan` for read-only analysis and `--permission-mode acceptEdits` for edit tasks.
 3. Assemble the command with the appropriate options:
    - `--model <MODEL>` (alias or full model ID)
    - `--permission-mode <default|acceptEdits|bypassPermissions|plan>`
@@ -65,6 +65,11 @@ Claude is powered by Anthropic models with their own knowledge cutoffs and limit
 
 ## Error Handling
 - Stop and report failures whenever `claude --version` or a `claude -p` command exits non-zero; request direction before retrying.
-- Before you use high-impact flags (`--permission-mode bypassPermissions`, `--dangerously-skip-permissions`) ask the user for permission using AskUserQuestion unless it was already given.
+- Before you use `--permission-mode bypassPermissions`, ask the user for permission using AskUserQuestion unless it was already given.
 - When output includes warnings or partial results, summarize them and ask how to adjust using `AskUserQuestion`.
 - Set a reasonable `--max-budget-usd` for long-running tasks to prevent unexpected costs.
+- For long-running tasks, consider using `--max-turns` or wrapping the command with `timeout` to prevent runaway sessions.
+
+## Handling Large Input/Output
+- **Large prompts**: For prompts that include file contents or large context, pipe via stdin: `cat context.txt | claude -p "Analyze this code"` rather than inlining everything in the shell argument.
+- **Large output**: If Claude's response exceeds ~200 lines, summarize key findings for the user rather than relaying the full output verbatim. Highlight actionable items, errors, and recommendations.
