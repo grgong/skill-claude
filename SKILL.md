@@ -58,7 +58,7 @@ Claude is powered by Anthropic models with their own knowledge cutoffs and limit
 2. Provide evidence (your own knowledge, web search, docs)
 3. Optionally resume the Claude session to discuss the disagreement. **Identify yourself** so Claude knows it's a peer AI discussion:
    ```bash
-   claude -c -p "This is <your agent name> following up. I disagree with [X] because [evidence]. What's your take on this?"
+   claude -c -p "This is <your agent name> (<your model name>) following up. I disagree with [X] because [evidence]. What's your take on this?"
    ```
 4. Frame disagreements as discussions, not corrections - either AI could be wrong
 5. Let the user decide how to proceed if there's genuine ambiguity
