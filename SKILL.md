@@ -1,11 +1,11 @@
 ---
 name: claude
-description: Use when the user asks to run a separate Claude Code CLI instance (claude exec, claude -p) or references spawning another Claude for code analysis, refactoring, or automated editing
+description: Use when the user asks to run Claude Code CLI (claude -p) or references Claude Code for code analysis, refactoring, or automated editing
 ---
 
 # Claude Skill Guide
 
-This skill delegates prompts to a **separate Claude Code CLI process** (`claude -p`), running it as an external tool. This is useful for parallel analysis, second opinions, or running tasks in isolation.
+This skill delegates prompts to **Claude Code CLI** (`claude -p`), running it as an external tool from another agent harness (e.g., Codex, Gemini, Cursor). This enables cross-agent collaboration, second opinions, and leveraging Claude's strengths from any coding agent.
 
 ## Running a Task
 1. Ask the user (via `AskUserQuestion`) which model to run (`opus`, `sonnet`, or `haiku` — or full model IDs like `claude-opus-4-6`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`) AND which permission mode to use (`default`, `acceptEdits`, `plan`, or `bypassPermissions`) AND which effort level to use (`low`, `medium`, `high`, or `max`) in a **single prompt with three questions**.
@@ -37,31 +37,30 @@ This skill delegates prompts to a **separate Claude Code CLI process** (`claude 
 | Budget-limited run | Match task | `-p --max-budget-usd 5.00 --model <MODEL> "prompt"` |
 
 ## Following Up
-- After every `claude` command, immediately use `AskUserQuestion` to confirm next steps, collect clarifications, or decide whether to continue/resume.
-- When continuing, use `claude -c -p "new prompt"` to continue the most recent conversation.
+- After every `claude` command, immediately use `AskUserQuestion` to confirm next steps, collect clarifications, or decide whether to resume with `claude -c`.
 - Restate the chosen model, permission mode, and effort level when proposing follow-up actions.
 
 ## Critical Evaluation of Claude Output
 
-The spawned Claude instance is a separate process with its own context. Treat it as a **colleague, not an authority**.
+Claude is powered by Anthropic models with their own knowledge cutoffs and limitations. Treat Claude as a **colleague, not an authority**.
 
 ### Guidelines
-- **Compare outputs** when you and the spawned Claude disagree. Your context may differ from the spawned instance's context.
-- **Research disagreements** using WebSearch or documentation before accepting the spawned Claude's claims.
-- **Context differences** - The spawned Claude starts fresh and may lack conversation context you already have. Provide sufficient context in the prompt.
-- **Don't defer blindly** - The spawned instance can make mistakes. Evaluate its suggestions critically, especially regarding:
-  - Project-specific conventions it may not know
-  - Context from the current conversation it doesn't have
-  - Files or changes it hasn't seen
+- **Trust your own knowledge** when confident. If Claude claims something you know is incorrect, push back directly.
+- **Research disagreements** using web search or documentation before accepting Claude's claims. Share findings with Claude via resume if needed.
+- **Remember knowledge cutoffs** - Claude may not know about recent releases, APIs, or changes that occurred after its training data.
+- **Don't defer blindly** - Claude can be wrong. Evaluate its suggestions critically, especially regarding:
+  - Model names and capabilities
+  - Recent library versions or API changes
+  - Best practices that may have evolved
 
-### When the Spawned Claude is Wrong
+### When Claude is Wrong
 1. State your disagreement clearly to the user
-2. Provide evidence (your own analysis, web search, docs)
-3. Optionally continue the session to discuss the disagreement:
+2. Provide evidence (your own knowledge, web search, docs)
+3. Optionally resume the Claude session to discuss the disagreement. **Identify yourself** so Claude knows it's a peer AI discussion:
    ```bash
-   claude -c -p "I'm the parent Claude session following up. I disagree with [X] because [evidence]. Please reconsider."
+   claude -c -p "This is <your agent name> following up. I disagree with [X] because [evidence]. What's your take on this?"
    ```
-4. Frame disagreements as discussions - the spawned instance may have a valid perspective you missed
+4. Frame disagreements as discussions, not corrections - either AI could be wrong
 5. Let the user decide how to proceed if there's genuine ambiguity
 
 ## Error Handling

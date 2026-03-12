@@ -1,6 +1,6 @@
 # skill-claude
 
-Enable any coding agent to spawn a separate [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) instance for parallel analysis, second opinions, and automated editing.
+Enable any coding agent (Codex, Gemini, Cursor, etc.) to invoke [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) for code analysis, refactoring, and automated editing.
 
 ## Prerequisites
 
@@ -21,19 +21,19 @@ npx skills add grgong/skill-claude
 Copy the `skill-claude` directory into your agent's skills folder:
 
 ```bash
-# Claude Code
-cp -r skill-claude ~/.claude/skills/claude
-
 # Codex / universal
 cp -r skill-claude ~/.agents/skills/claude
+
+# Gemini
+cp -r skill-claude ~/.gemini/skills/claude
 ```
 
 ## Usage
 
-Ask your agent to delegate a task to a separate Claude instance:
+Ask your agent to delegate a task to Claude:
 
 ```
-Use a separate claude instance to review my code changes.
+Use claude to review my code changes.
 ```
 
 The skill will guide the agent through model, permission mode, and effort level selection, then run `claude -p` in non-interactive mode.
