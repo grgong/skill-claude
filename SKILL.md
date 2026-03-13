@@ -1,11 +1,11 @@
 ---
 name: claude
-description: Use when the user asks to run Claude Code CLI (claude -p) or references Claude Code for code analysis, refactoring, or automated editing
+description: Use when the user asks to run Claude Code CLI (claude -p) for a second opinion, code review, or cross-agent collaboration
 ---
 
 # Claude Skill Guide
 
-This skill delegates prompts to **Claude Code CLI** (`claude -p`), running it as an external tool from another agent harness (e.g., Codex, Gemini, Cursor). This enables cross-agent collaboration, second opinions, and leveraging Claude's strengths from any coding agent.
+This skill delegates prompts to **Claude Code CLI** (`claude -p`), running it as an external tool from another agent harness (e.g., Codex, Gemini, Cursor). The primary use case is getting a **second opinion or code review** from Claude, enabling cross-agent collaboration.
 
 ## Running a Task
 1. Using your internal structured multiple-choice function, ask the user which model to run (`claude-opus-4-6` or `claude-sonnet-4-6`) AND which effort level to use (`low`, `medium`, `high`, or `max`) in a **single prompt with two questions**.
