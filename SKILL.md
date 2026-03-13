@@ -8,7 +8,7 @@ description: Use when the user asks to run Claude Code CLI (claude -p) or refere
 This skill delegates prompts to **Claude Code CLI** (`claude -p`), running it as an external tool from another agent harness (e.g., Codex, Gemini, Cursor). This enables cross-agent collaboration, second opinions, and leveraging Claude's strengths from any coding agent.
 
 ## Running a Task
-1. Ask the user (via `AskUserQuestion`) which model to run (`opus` or `sonnet` — or full model IDs like `claude-opus-4-6`, `claude-sonnet-4-6`) AND which permission mode to use (`default`, `acceptEdits`, `plan`, or `bypassPermissions`) AND which effort level to use (`low`, `medium`, `high`, or `max`) in a **single prompt with three questions**.
+1. Using your internal structured multiple-choice function, ask the user which model to run (`claude-opus-4-6` or `claude-sonnet-4-6`) AND which permission mode to use (`default`, `acceptEdits`, `plan`, or `bypassPermissions`) AND which effort level to use (`low`, `medium`, `high`, or `max`) in a **single prompt with three questions**.
 2. Use the user's choices. If the user does not specify a permission mode, default to `--permission-mode plan` for read-only analysis and `--permission-mode acceptEdits` for edit tasks.
 3. Assemble the command with the appropriate options:
    - `--model <MODEL>` (alias or full model ID)
@@ -37,7 +37,7 @@ This skill delegates prompts to **Claude Code CLI** (`claude -p`), running it as
 | Budget-limited run | Match task | `-p --max-budget-usd 5.00 --model <MODEL> "prompt"` |
 
 ## Following Up
-- After every `claude` command, immediately use `AskUserQuestion` to confirm next steps, collect clarifications, or decide whether to resume with `claude -c`.
+- After every `claude` command, immediately ask the user to confirm next steps, collect clarifications, or decide whether to resume with `claude -c`.
 - Restate the chosen model, permission mode, and effort level when proposing follow-up actions.
 
 ## Critical Evaluation of Claude Output
@@ -65,8 +65,8 @@ Claude is powered by Anthropic models with their own knowledge cutoffs and limit
 
 ## Error Handling
 - Stop and report failures whenever `claude --version` or a `claude -p` command exits non-zero; request direction before retrying.
-- Before you use `--permission-mode bypassPermissions`, ask the user for permission using AskUserQuestion unless it was already given.
-- When output includes warnings or partial results, summarize them and ask how to adjust using `AskUserQuestion`.
+- Before you use `--permission-mode bypassPermissions`, ask the user for permission unless it was already given.
+- When output includes warnings or partial results, summarize them and ask the user how to adjust.
 - Set a reasonable `--max-budget-usd` for long-running tasks to prevent unexpected costs.
 - For long-running tasks, consider using `--max-turns` or wrapping the command with `timeout` to prevent runaway sessions.
 
