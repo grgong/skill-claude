@@ -8,8 +8,8 @@ description: Use when the user asks to run Claude Code CLI (claude -p) or refere
 This skill delegates prompts to **Claude Code CLI** (`claude -p`), running it as an external tool from another agent harness (e.g., Codex, Gemini, Cursor). This enables cross-agent collaboration, second opinions, and leveraging Claude's strengths from any coding agent.
 
 ## Running a Task
-1. Using your internal structured multiple-choice function, ask the user which model to run (`claude-opus-4-6` or `claude-sonnet-4-6`) AND which permission mode to use (`default`, `acceptEdits`, `plan`, or `bypassPermissions`) AND which effort level to use (`low`, `medium`, `high`, or `max`) in a **single prompt with three questions**.
-2. Use the user's choices. If the user does not specify a permission mode, default to `--permission-mode plan` for read-only analysis and `--permission-mode acceptEdits` for edit tasks.
+1. Using your internal structured multiple-choice function, ask the user which model to run (`claude-opus-4-6` or `claude-sonnet-4-6`) AND which effort level to use (`low`, `medium`, `high`, or `max`) in a **single prompt with two questions**.
+2. Determine the permission mode from the **Quick Reference** table below based on the task type — do **not** ask the user unless they have explicitly specified a permission mode. Defaults: `--permission-mode plan` for read-only analysis, `--permission-mode acceptEdits` for edit tasks. `--permission-mode bypassPermissions` requires explicit user permission.
 3. Assemble the command with the appropriate options:
    - `--model <MODEL>` (alias or full model ID)
    - `--permission-mode <default|acceptEdits|bypassPermissions|plan>`
